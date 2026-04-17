@@ -1,0 +1,164 @@
+import { useEffect, useMemo, useState } from 'react'
+import { api } from '../lib/api'
+import type { EmployeeCreateRequest, EmployeeResponse } from '../lib/types'
+import { PageShell } from '../components/PageShell'
+
+export function EmployeesPage() {
+  const [items, setItems] = useState<EmployeeResponse[]>([])
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [dateOfBirth, setDateOfBirth] = useState('')
+  const [nationalityIdentity, setNationalityIdentity] = useState('')
+  const [password, setPassword] = useState('')
+  const [position, setPosition] = useState('')
+
+  const canSubmit = useMemo(
+    () =>
+      firstName &&
+      lastName &&
+      email &&
+      dateOfBirth &&
+      nationalityIdentity.length === 11 &&
+      password.length >= 6 &&
+      position.length >= 2,
+    [firstName, lastName, email, dateOfBirth, nationalityIdentity, password, position],
+  )
+
+  async function load() {
+    setError(null)
+    setLoading(true)
+    try {
+      const res = await api.get<EmployeeResponse[]>('/api/employees')
+      setItems(res.data)
+    } catch (err: any) {
+      setError(err?.response?.data?.message ?? 'Employee listesi alınamadı')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    load()
+  }, [])
+
+  async function create() {
+    setError(null)
+    try {
+      const body: EmployeeCreateRequest = {
+        firstName,
+        lastName,
+        email,
+        dateOfBirth,
+        nationalityIdentity,
+        password,
+        position,
+      }
+      await api.post('/api/employees', body)
+      setFirstName('')
+      setLastName('')
+      setEmail('')
+      setDateOfBirth('')
+      setNationalityIdentity('')
+      setPassword('')
+      setPosition('')
+      await load()
+    } catch (err: any) {
+      setError(err?.response?.data?.message ?? 'Employee oluşturulamadı')
+    }
+  }
+
+  async function remove(id: number) {
+    setError(null)
+    try {
+      await api.delete(`/api/employees/${id}`)
+      await load()
+    } catch (err: any) {
+      setError(err?.response?.data?.message ?? 'Employee silinemedi')
+    }
+  }
+
+  return (
+    <PageShell title="Employees" subtitle={loading ? 'Yükleniyor…' : 'Listele / Ekle / Sil'}>
+      {error && <div className="alert">{error}</div>}
+
+      <div className="grid" style={{ marginTop: 12 }}>
+        <div className="col-6">
+          <label>Ad</label>
+          <input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+        </div>
+        <div className="col-6">
+          <label>Soyad</label>
+          <input value={lastName} onChange={(e) => setLastName(e.target.value)} />
+        </div>
+        <div className="col-6">
+          <label>Email</label>
+          <input value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+        <div className="col-6">
+          <label>Doğum tarihi</label>
+          <input value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} type="date" />
+        </div>
+        <div className="col-6">
+          <label>TC Kimlik No</label>
+          <input value={nationalityIdentity} onChange={(e) => setNationalityIdentity(e.target.value)} />
+        </div>
+        <div className="col-6">
+          <label>Şifre</label>
+          <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" />
+        </div>
+        <div className="col-12">
+          <label>Pozisyon</label>
+          <input value={position} onChange={(e) => setPosition(e.target.value)} />
+        </div>
+        <div className="col-12 row" style={{ justifyContent: 'flex-end' }}>
+          <button className="primary" type="button" disabled={!canSubmit} onClick={create}>
+            Employee ekle
+          </button>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 16 }}>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Ad Soyad</th>
+              <th>Email</th>
+              <th>Pozisyon</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((e) => (
+              <tr key={e.id}>
+                <td>{e.id}</td>
+                <td>
+                  {e.firstName} {e.lastName}
+                </td>
+                <td>{e.email}</td>
+                <td>{e.position}</td>
+                <td style={{ textAlign: 'right' }}>
+                  <button className="danger" type="button" onClick={() => remove(e.id)}>
+                    Sil
+                  </button>
+                </td>
+              </tr>
+            ))}
+            {items.length === 0 && (
+              <tr>
+                <td colSpan={5} className="muted">
+                  Kayıt yok.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </PageShell>
+  )
+}
+
