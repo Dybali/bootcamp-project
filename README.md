@@ -1,5 +1,52 @@
 # Bootcamp Management (Spring Boot + React)
 
+## Uygulama ne yapar?
+
+Bootcamp Management, bir bootcamp eğitim sürecini yönetmek için geliştirilmiş bir **REST API (Spring Boot)** ve ona bağlı bir **admin panel (React)** uygulamasıdır.
+
+Amaç:
+- Bootcamp’leri tanımlamak ve yönetmek
+- Başvuru sahiplerini (Applicant) yönetmek
+- Bootcamp başvurularını (Application) yönetmek
+- Kara liste (Blacklist) ile başvuruları kural bazlı kısıtlamak
+- Sistemdeki kullanıcı tiplerini (User/Instructor/Employee) yönetmek
+
+## Öne çıkan özellikler
+
+- **JWT Authentication**
+  - Login sonrası token üretilir.
+  - Token ile korumalı endpoint’lere erişilir (`Authorization: Bearer <token>`).
+
+- **Katmanlı mimari**
+  - `controller / service / repository / dto / businessrules / exception / mapper` yapısı.
+
+- **Validasyon & hata yönetimi**
+  - DTO doğrulamaları (`@Valid`, bean validation)
+  - Global exception handler ile okunabilir hata cevapları.
+
+- **CRUD Yönetim Paneli (React)**
+  - Login / Register
+  - Dashboard
+  - Bootcamps: Listele / Ekle / Sil
+  - Applicants: Listele / Ekle / Sil
+  - Applications: Listele / Ekle / Sil
+  - Blacklists: Listele / Ekle / Sil
+  - Instructors: Listele / Ekle / Sil
+  - Employees: Listele / Ekle / Sil
+  - Users: Listele / Ekle / Sil
+
+- **Kurallar (Business Rules)**
+  - Bootcamp tarih kontrolü (startDate < endDate)
+  - Aynı bootcamp adına mükerrer kayıt engeli
+  - Başvuru tekrarını engelleme (aynı applicant aynı bootcamp’e tekrar başvuramasın)
+  - Blacklist kontrolü (blacklist’teyse başvuru yapamasın)
+
+## Teknolojiler
+
+- Backend: Java 17, Spring Boot, Spring Security, Spring Data JPA, Validation, H2, MapStruct
+- Auth: JWT
+- Frontend: Vite + React + TypeScript, Axios, React Router
+
 ## Proje yapısı
 
 - `src/main/java`: Spring Boot backend (REST API)
