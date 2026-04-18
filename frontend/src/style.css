@@ -1,14 +1,18 @@
 :root {
-  --bg: #f4f6f9;
+  /* Beyaz ağırlıklı + mavi vurgular */
+  --bg: #ffffff;
   --surface: #ffffff;
-  --border: #e2e8f0;
-  --text: #1e293b;
-  --muted: #64748b;
+  --border: #e1eaf5;
+  --border-strong: #c7d9f0;
+  --text: #0f172a;
+  --muted: #5b6b86;
   --accent: #2563eb;
+  --accent-soft: #eff6ff;
   --accent-hover: #1d4ed8;
   --danger: #dc2626;
   --danger-bg: #fef2f2;
-  --shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow: 0 1px 2px rgba(37, 99, 235, 0.06);
+  --shadow-panel: 0 4px 24px rgba(37, 99, 235, 0.07);
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: var(--text);
   background: var(--bg);
@@ -18,6 +22,7 @@
 body {
   margin: 0;
   min-height: 100vh;
+  background: var(--bg);
 }
 
 a {
@@ -33,7 +38,7 @@ a {
 .nav {
   position: sticky;
   top: 0;
-  background: var(--surface);
+  background: #ffffff;
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow);
   z-index: 10;
@@ -69,13 +74,15 @@ a {
   padding: 8px 14px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: var(--surface);
+  background: #ffffff;
   font-size: 14px;
+  color: var(--text);
 }
 
 .pill:hover {
-  border-color: #cbd5e1;
-  background: #f8fafc;
+  border-color: var(--border-strong);
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 .main {
@@ -84,9 +91,9 @@ a {
 
 .panel {
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: #ffffff;
   border-radius: 12px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-panel);
   max-width: 520px;
   margin: 0 auto;
 }
@@ -104,6 +111,7 @@ h1 {
   font-size: 1.35rem;
   font-weight: 600;
   letter-spacing: -0.02em;
+  color: var(--text);
 }
 
 .muted {
@@ -145,7 +153,7 @@ select {
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: #ffffff;
   color: var(--text);
   font-size: 15px;
 }
@@ -154,13 +162,13 @@ input:focus,
 select:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
 }
 
 button {
   cursor: pointer;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: #ffffff;
   color: var(--text);
   padding: 10px 16px;
   border-radius: 8px;
@@ -169,18 +177,21 @@ button {
 }
 
 button:hover {
-  background: #f8fafc;
+  background: var(--accent-soft);
+  border-color: var(--border-strong);
+  color: var(--accent);
 }
 
 button.primary {
   border-color: var(--accent);
   background: var(--accent);
-  color: #fff;
+  color: #ffffff;
 }
 
 button.primary:hover:not(:disabled) {
   background: var(--accent-hover);
   border-color: var(--accent-hover);
+  color: #ffffff;
 }
 
 button.primary:disabled {
@@ -196,6 +207,7 @@ button.danger {
 
 button.danger:hover {
   background: #fee2e2;
+  color: var(--danger);
 }
 
 .row {
@@ -210,7 +222,7 @@ button.danger:hover {
   border-collapse: collapse;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: #ffffff;
 }
 
 .table th,
@@ -224,7 +236,7 @@ button.danger:hover {
   text-align: left;
   color: var(--muted);
   font-weight: 600;
-  background: #f8fafc;
+  background: var(--accent-soft);
 }
 
 .table tr:last-child td {
@@ -240,7 +252,6 @@ button.danger:hover {
   font-size: 14px;
 }
 
-/* Geniş sayfalar (CRUD listeleri) */
 .panel.wide {
   max-width: none;
 }
