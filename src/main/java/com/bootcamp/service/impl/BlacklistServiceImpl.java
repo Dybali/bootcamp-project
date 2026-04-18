@@ -61,7 +61,7 @@ public class BlacklistServiceImpl implements IBlacklistService {
 
         applicantBusinessRules.checkIfApplicantExists(request.getApplicantId());
 
-        blacklist = blacklistMapper.toEntity(request);
+        Blacklist blacklist = blacklistMapper.toEntity(request);
         blacklist.setId(id);
         blacklist.setDate(LocalDate.now());
         blacklist = blacklistRepository.save(blacklist);

@@ -60,15 +60,18 @@ public class ApplicationServiceImpl implements IApplicationService {
 
     @Override
     public ApplicationResponse update(Long id, ApplicationCreateRequest request) {
-        applicationRepository.findById(id)
+        Application existing = applicationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Application bulunamadı: " + id));
 
         applicantBusinessRules.checkIfApplicantExists(request.getApplicantId());
         applicantBusinessRules.checkIfBlacklisted(request.getApplicantId());
-        applicationBusinessRules.checkIfApplicantAppliedToBootcamp(request.getApplicantId(), request.getBootcampId());
+        if (!existing.getApplicantId().equals(request.getApplicantId())
+                || !existing.getBootcampId().equals(request.getBootcampId())) {
+            applicationBusinessRules.checkIfApplicantAppliedToBootcamp(request.getApplicantId(), request.getBootcampId());
+        }
         applicationBusinessRules.checkIfBootcampIsActive(request.getBootcampId());
 
-        application = applicationMapper.toEntity(request);
+        Application application = applicationMapper.toEntity(request);
         application.setId(id);
         application = applicationRepository.save(application);
         return applicationMapper.toResponse(application);
