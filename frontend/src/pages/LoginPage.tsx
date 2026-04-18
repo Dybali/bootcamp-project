@@ -32,7 +32,7 @@ export function LoginPage() {
       <div className="panel">
         <div className="panel-header">
           <h1>Giriş</h1>
-          <p className="muted">JWT ile korunmuş sisteme giriş yap.</p>
+          <p className="muted">E-posta ve şifrenle panele giriş yap.</p>
         </div>
         <div className="panel-body">
           {error && <div className="alert">{error}</div>}

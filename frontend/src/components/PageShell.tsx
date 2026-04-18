@@ -18,7 +18,7 @@ export function PageShell({
           ← Geri
         </Link>
       </div>
-      <div className="panel">
+      <div className="panel wide">
         <div className="panel-header">
           <h1>{title}</h1>
           {subtitle && <p className="muted">{subtitle}</p>}

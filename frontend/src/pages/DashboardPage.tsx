@@ -5,7 +5,7 @@ export function DashboardPage() {
   const user = getUser()
   return (
     <div className="container main">
-      <div className="panel">
+      <div className="panel wide">
         <div className="panel-header">
           <h1>Dashboard</h1>
           <p className="muted">

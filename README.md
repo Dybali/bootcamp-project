@@ -95,6 +95,16 @@ Backend URL ayarı: `frontend/.env` içindeki `VITE_API_URL`.
 
 Login sonrası token’ı `Authorization: Bearer <token>` header’ı ile çağırmalısın.
 
+## İlk giriş ve veritabanı
+
+- **Ayrı bir veritabanı kurmana gerek yok.** Varsayılan olarak **H2 (bellek içi / in-memory)** kullanılır; uygulama kapanınca veriler sıfırlanır (`application.properties` içinde `spring.jpa.hibernate.ddl-auto=create-drop`).
+- **H2 Console** (geliştirme): `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:mem:bootcampdb`, kullanıcı `sa` — detaylar `application.properties` içinde).
+- **Panele nasıl girilir?**
+  1. Önce backend’i, sonra frontend’i çalıştır.
+  2. Tarayıcıda **Kayıt ol** ile kendi kullanıcını oluştur (e-posta, şifre, doğum tarihi, 11 haneli TC alanı zorunlu).
+  3. **Giriş** ile aynı e-posta ve şifreyle oturum aç. Token tarayıcıda saklanır; korumalı sayfalar otomatik API’ye ekler.
+- **Hazır demo eğitmen (seed):** İlk açılışta sistem bir **Instructor** ekler. Bootcamp eklerken **Instructor ID = 1** kullanabilirsin. (Örnek hesap: `instructor@demo.com` / `Password123!` — panel girişi için değil, tabloda kayıt olması içindir; panele kendi register kullanıcınla gir.)
+
 ## Örnek ekran
 
 Frontend şu an:
@@ -110,6 +120,3 @@ Frontend şu an:
 2. Frontend’i çalıştır.
 3. `/register` ile kullanıcı oluştur → `/login` ile giriş yap.
 4. İlk bootcamp için **Instructor ID = 1** kullanabilirsin (seed).
-
-# bootcamp-project
-java sprıng internship final project

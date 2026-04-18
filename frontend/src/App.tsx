@@ -12,7 +12,6 @@ export function AppLayout() {
         <div className="container nav-inner">
           <div className="brand">
             <Link to={token ? '/dashboard' : '/login'}>Bootcamp Management</Link>
-            <span className="pill muted">Spring Boot + React</span>
           </div>
           <div className="row">
             {token ? (
