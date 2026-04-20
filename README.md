@@ -1,143 +1,111 @@
 # Bootcamp Management (Spring Boot + React)
 
-## Uygulama ne yapar?
+This is my bootcamp project. It has a **Spring Boot REST API** and a simple **React admin panel** to manage a bootcamp system.
 
-Bootcamp Management, bir bootcamp eğitim sürecini yönetmek için geliştirilmiş bir **REST API (Spring Boot)** ve ona bağlı bir **admin panel (React)** uygulamasıdır.
+## What can you do in the app?
 
-Amaç:
-- Bootcamp’leri tanımlamak ve yönetmek
-- Başvuru sahiplerini (Applicant) yönetmek
-- Bootcamp başvurularını (Application) yönetmek
-- Kara liste (Blacklist) ile başvuruları kural bazlı kısıtlamak
-- Sistemdeki kullanıcı tiplerini (User/Instructor/Employee) yönetmek
+- Manage **Bootcamps**
+- Manage **Applicants**
+- Manage **Applications**
+- Manage **Blacklists**
+- Manage system users (**User / Instructor / Employee**)
 
-## Öne çıkan özellikler
+## Main features
 
 - **JWT Authentication**
-  - Login sonrası token üretilir.
-  - Token ile korumalı endpoint’lere erişilir (`Authorization: Bearer <token>`).
-
-- **Katmanlı mimari**
-  - `controller / service / repository / dto / businessrules / exception / mapper` yapısı.
-
-- **Validasyon & hata yönetimi**
-  - DTO doğrulamaları (`@Valid`, bean validation)
-  - Global exception handler ile okunabilir hata cevapları.
-
-- **CRUD Yönetim Paneli (React)**
+  - After login, the API returns a token.
+  - For protected endpoints, use: `Authorization: Bearer <token>`
+- **Layered architecture**
+  - `controller / service / repository / dto / businessrules / exception / mapper`
+- **Validation and error handling**
+  - DTO validation with `@Valid`
+  - Global exception handler for readable API errors
+- **React Admin Panel (CRUD)**
   - Login / Register
   - Dashboard
-  - Bootcamps: Listele / Ekle / Sil
-  - Applicants: Listele / Ekle / Sil
-  - Applications: Listele / Ekle / Sil
-  - Blacklists: Listele / Ekle / Sil
-  - Instructors: Listele / Ekle / Sil
-  - Employees: Listele / Ekle / Sil
-  - Users: Listele / Ekle / Sil
+  - CRUD pages for Bootcamps, Applicants, Applications, Blacklists, Instructors, Employees, Users
 
-- **Kurallar (Business Rules)**
-  - Bootcamp tarih kontrolü (startDate < endDate)
-  - Aynı bootcamp adına mükerrer kayıt engeli
-  - Başvuru tekrarını engelleme (aynı applicant aynı bootcamp’e tekrar başvuramasın)
-  - Blacklist kontrolü (blacklist’teyse başvuru yapamasın)
+## Tech stack
 
-## Teknolojiler
+- **Backend**: Java 17, Spring Boot, Spring Security, Spring Data JPA, Validation, PostgreSQL, MapStruct
+- **Auth**: JWT
+- **Frontend**: Vite + React + TypeScript, Axios, React Router
 
-- Backend: Java 17, Spring Boot, Spring Security, Spring Data JPA, Validation, PostgreSQL, MapStruct
-- Auth: JWT
-- Frontend: Vite + React + TypeScript, Axios, React Router
-
-## Proje yapısı
+## Project structure
 
 - `src/main/java`: Spring Boot backend (REST API)
-- `frontend/`: Vite + React (TypeScript) frontend
+- `frontend/`: React frontend (Vite + TypeScript)
 
-## Backend çalıştırma
+## Run PostgreSQL (Docker)
 
-### Gereksinimler
+From the project root:
 
-- Java 17 (veya uyumlu)
-- `JAVA_HOME` environment variable ayarlı olmalı
+```bash
+docker compose up -d
+```
 
-### Windows (JAVA_HOME) hızlı kurulum
+Default DB values (Docker):
 
-- **Java kurulu mu kontrol**: PowerShell’de `java -version`
-- **JAVA_HOME örnek**: `C:\Program Files\Java\jdk-17`
-- Ayarladıktan sonra yeni terminal aç.
+- Host: `localhost`
+- Port: `5433` (because `5432` can already be used on your computer)
+- DB: `bootcampdb`
+- User: `postgres`
+- Password: `postgres`
 
-### Çalıştırma
+You can override with environment variables:
 
-Proje kökünde:
+- `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`
+- `HIBERNATE_DDL_AUTO` (default: `update`)
+
+## Run backend (Spring Boot)
+
+### Requirements
+
+- Java 17+
+- `JAVA_HOME` should be set
+
+### Run
+
+From the project root:
 
 ```bash
 .\mvnw.cmd spring-boot:run
 ```
 
-Backend varsayılan port: `8080`
+Backend default port: `8080`
 
-## Frontend çalıştırma
+## Run frontend (React)
 
-`frontend/` klasöründe:
+Inside `frontend/`:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Frontend varsayılan port: `5173`
+Frontend default port: `5173`
 
-Backend URL ayarı: `frontend/.env` içindeki `VITE_API_URL`.
+Backend URL config is in `frontend/.env` (`VITE_API_URL`).
 
-## Auth (JWT)
+## Auth endpoints (JWT)
 
 - `POST /api/auth/register`
-- `POST /api/auth/login` → `{ token, user }`
+- `POST /api/auth/login` → returns `{ token, user }`
 
-Login sonrası token’ı `Authorization: Bearer <token>` header’ı ile çağırmalısın.
+After login, send your token in the header: `Authorization: Bearer <token>`.
 
-## İlk giriş ve veritabanı
+## First usage (quick demo flow)
 
-- Bu proje backend tarafında **PostgreSQL** kullanır.
-- Lokal geliştirme için Postgres’i Docker ile ayağa kaldırabilirsin (aşağıdaki adımlar).
-- **Panele nasıl girilir?**
-  1. Önce backend’i, sonra frontend’i çalıştır.
-  2. Tarayıcıda **Kayıt ol** ile kendi kullanıcını oluştur (e-posta, şifre, doğum tarihi, 11 haneli TC alanı zorunlu).
-  3. **Giriş** ile aynı e-posta ve şifreyle oturum aç. Token tarayıcıda saklanır; korumalı sayfalar otomatik API’ye ekler.
-- **Hazır demo eğitmen (seed):** İlk açılışta sistem bir **Instructor** ekler. Bootcamp eklerken **Instructor ID = 1** kullanabilirsin. (Örnek hesap: `instructor@demo.com` / `Password123!` — panel girişi için değil, tabloda kayıt olması içindir; panele kendi register kullanıcınla gir.)
+1. Start PostgreSQL with Docker.
+2. Start backend.
+3. Start frontend.
+4. Go to `/register` and create your user.
+5. Login and use the admin panel.
 
-## Örnek ekran
+### Demo seed
 
-Frontend şu an:
+On first run, the backend inserts a demo instructor into the database.
 
-- Login / Register
-- Dashboard
-- Bootcamps (listeleme + ekleme + silme)
-- Applicants / Applications / Blacklists / Instructors / Employees / Users (listeleme + ekleme + silme)
-
-## Demo önerilen akış
-
-1. PostgreSQL’i ayağa kaldır.
-2. Frontend’i çalıştır.
-3. `/register` ile kullanıcı oluştur → `/login` ile giriş yap.
-4. İlk bootcamp için **Instructor ID = 1** kullanabilirsin (seed).
-
-## PostgreSQL (Docker) ile çalıştırma
-
-Proje kökünde:
-
-```bash
-docker compose up -d
-```
-
-Backend varsayılan DB ayarları:
-
-- Host: `localhost`
-- Port: `5433` (lokalde 5432 dolu olabildiği için Docker dışarıya 5433'ten açılır)
-- DB: `bootcampdb`
-- User: `postgres`
-- Password: `postgres`
-
-İstersen environment variable ile override edebilirsin:
-
-- `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`
-- `HIBERNATE_DDL_AUTO` (varsayılan: `update`)
+- Email: `instructor@demo.com`
+- Password: `Password123!`
+- When creating a Bootcamp, you can use **Instructor ID = 1**
